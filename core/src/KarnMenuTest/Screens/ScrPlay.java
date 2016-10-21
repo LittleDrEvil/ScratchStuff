@@ -24,6 +24,7 @@ import java.util.ArrayList;
  * Created by Luke on 2016-04-05.
  */
 public class ScrPlay implements Screen, InputProcessor {
+    HitTestClass hitTest = new HitTestClass();
     Vector2 vBlo;
     Vector2[] avB;
     GdxMenu gdxMenu;
@@ -33,6 +34,7 @@ public class ScrPlay implements Screen, InputProcessor {
     SpriteBatch batch;
     BitmapFont screenName;
     CharClass charSonic = new CharClass();
+    CharClass charSon = new CharClass();
     Animation[] aniChar;
     private float elapsedTime = 0;
     Texture imgFloor, imgBack, imgBlock;
@@ -54,7 +56,8 @@ public class ScrPlay implements Screen, InputProcessor {
         imgBack = new Texture(Gdx.files.internal("background.png"));
         imgFloor = new Texture(Gdx.files.internal("background1.png"));
         imgBlock = new Texture(Gdx.files.internal("block.png"));
-        charSonic.charMain("Sonic");
+        charSonic.charMain("Sonic", 1);
+        charSon.charMain("Sonic", 2);
         stage = new Stage();
         tbsMenu = new TbsMenu();
         tbMenu = new TbMenu("BACK", tbsMenu);
@@ -100,14 +103,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        charSonic.dGravity = -0.01;
-        for (int i = 0; i < nBlockSize; i++) {
-            charSonic = charSonic.update1(charSonic,avB[i], fDist);
-        }
-        charSonic.update();
-        
         batch.begin();
-        nDir = charSonic.Direction();
         elapsedTime += Gdx.graphics.getDeltaTime();
         
         if((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())){
@@ -120,15 +116,15 @@ public class ScrPlay implements Screen, InputProcessor {
         batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
         batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
         batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
+        if(charSonic.nPlayer == 1){
+        charSonic.dGravity = -0.01;
+        for (int i = 0; i < nBlockSize; i++) {
+            charSonic = hitTest.HitTest(charSonic,avB[i], fDist);
+        }
+        nDir = charSonic.Direction();
+        charSonic.update();
         batch.draw(charSonic.aniChar[nDir].getKeyFrame
                 (elapsedTime, true), charSonic.vChar.x, charSonic.vChar.y);
-        
-        for (int i = 0; i < nBlockSize; i++) {
-            batch.draw(imgBlock, avB[i].x - fDist, avB[i].y, 30, 30);
-        }
-        
-        batch.end();
-        
         if(fDist > 0) {
             fBackX -= charSonic.fSx;
         } else if (fDist<0) {
@@ -137,6 +133,32 @@ public class ScrPlay implements Screen, InputProcessor {
         }
         
         fDist += charSonic.fSx;
+        }
+        if(charSonic.nPlayer == 2){
+        charSonic.dGravity = -0.01;
+        for (int i = 0; i < nBlockSize; i++) {
+            charSonic = hitTest.HitTest(charSonic,avB[i], fDist);
+        }
+        nDir = charSonic.Direction();
+        charSonic.update();
+        batch.draw(charSonic.aniChar[nDir].getKeyFrame
+                (elapsedTime, true), charSonic.vChar.x, charSonic.vChar.y);
+        if(fDist > 0) {
+            fBackX -= charSonic.fSx;
+        } else if (fDist<0) {
+            charSonic.fSx = 0;
+            fDist = 0;
+        }
+        
+        fDist += charSonic.fSx;
+        }
+        for (int i = 0; i < nBlockSize; i++) {
+            batch.draw(imgBlock, avB[i].x - fDist, avB[i].y, 30, 30);
+        }
+        
+        batch.end();
+        
+        
 //        
 //        if (charSonic.vChar.x < 0 && fDist <= 125) {
 //            charSonic.vChar.x += charSonic.fSx;

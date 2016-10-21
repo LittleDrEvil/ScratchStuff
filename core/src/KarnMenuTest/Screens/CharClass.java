@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class CharClass {
 
+    int nPlayer;
     Vector2 vChar = new Vector2();
     Vector2 vFloor = new Vector2();
     Sprite sprChar;
@@ -16,9 +17,14 @@ public class CharClass {
     TextureAtlas textureAtlas1;
     int nDir = 0, nJum;
     float x, y = 100, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
-    double dSpeed, dGravity= -0.01;
+    double dSpeed, dGravity = -0.01;
+    Vector2[] avB;
+    int nBlockSize = 10;
+    Vector2 vBlo;
 
-    public void charMain(String sCharacter) {
+    public void charMain(String sCharacter, int _nPlayer) {
+
+        nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
         textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
@@ -33,32 +39,64 @@ public class CharClass {
         aniChar[4] = new Animation(1 / 15f, textureAtlas1.getRegions());
         textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
         aniChar[5] = new Animation(1 / 15f, textureAtlas1.getRegions());
+
+
+        vBlo = new Vector2();
+        avB = new Vector2[nBlockSize];
+
+        for (int i = 0; i < nBlockSize; i++) {
+            avB[i] = new Vector2();
+            vBlo.add(70 * i, 40 * (i + 1));
+            avB[i].add(vBlo.x, vBlo.y);
+            vBlo.add(-vBlo.x, -vBlo.y);
+        }
     }
 
     public void update() {
         //Gravity and Movement {
+        System.out.println(nJum);
+        System.out.println(fDy);
         fSY = vChar.y;
         fSX = vChar.x;
         dSpeed += dGravity;
         fDy += dSpeed;
-        
-        if (fSx > 0) {
-            fSx -= 0.1;
-        }
-        if (fSx < 0) {
-            fSx += 0.1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            fSx += 0.2;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            fSx -= 0.2;
+        if (fSx < 0.1 && fSx > -0.1) {
+            fSx = 0;
         }
 
-        if (nJum == 0) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                fDy = 4;
-                nJum = 1;
+        if (fSx >= 0) {
+            fSx -= 0.1;
+        }
+        if (fSx <= 0) {
+            fSx += 0.1;
+        }
+        
+        if (nPlayer == 1) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                fSx += 0.2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                fSx -= 0.2;
+            }
+            if (nJum == 0) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                    fDy = 4;
+                    nJum = 1;
+                }
+            }
+        }
+        if (nPlayer == 2) {
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                fSx += 0.2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                fSx -= 0.2;
+            }
+            if (nJum == 0) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+                    fDy = 4;
+                    nJum = 1;
+                }
             }
         }
         // }
@@ -66,62 +104,14 @@ public class CharClass {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             fSx = 100;
         }
-        
-        if (vChar.x > Gdx.graphics.getWidth()-150) {
+
+        if (vChar.x > Gdx.graphics.getWidth() - 150) {
             vChar.x -= fSx;
-            vChar.x =  Gdx.graphics.getWidth()-149;
+            vChar.x = Gdx.graphics.getWidth() - 149;
         }
+        
         vChar.add(fSx, fDy);
         // }
-    }
-
-    CharClass update1(CharClass chara, Vector2 vBlock, float fDist){
-        
-        if (isHitV(chara.vChar, 30, 40, chara.vFloor, Gdx.graphics.getWidth(), 40)) {
-            chara.dSpeed = 0;
-            chara.nJum = 0;
-            chara.dGravity = 0;
-            chara.vChar.y = 40 - chara.fDy;
-        } 
-        
-        
-        if(isHitBlockT(chara.vChar.x, chara.vChar.y , 30 ,vBlock.x - fDist, vBlock.y , 30)){
-            
-            chara.dSpeed = 0;
-            chara.nJum = 0;
-            chara.vChar.y = vBlock.y + 30 - chara.fDy;
-            chara.dGravity = 0.00;
-//            if(chara.vChar.y < vBlock.y){
-//                
-//            }
-//            if(chara.vChar.y > vBlock.y){
-//                
-//            }
-            
-        } 
-        
-        if(isHitBlockLR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
-            chara.dSpeed = 0;
-            chara.nJum = 0;
-//            chara.vChar.x = chara.fSX- chara.fSx;
-            if(chara.vChar.x < vBlock.x - fDist) chara.vChar.x = chara.fSX-2;
-            
-            if(chara.vChar.x > vBlock.x - fDist) chara.vChar.x = chara.fSX+2;
-            
-            chara.fSx = 0;
-            chara.dGravity = 0;
-//            System.out.println("side");
-        } 
-        
-        
-        if (chara.vChar.x < 0 && fDist <= 125) {
-            chara.vChar.x += chara.fSx;
-            chara.vChar.x = 1;
-        } else if (chara.vChar.x < 125 && fDist > 125){
-            chara.vChar.x += chara.fSx;
-            chara.vChar.x = 126;
-        }
-        return chara;
     }
 
     int Direction() {
@@ -131,14 +121,21 @@ public class CharClass {
         if (nDir == 3) {
             nDir = 0;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            nDir = 2;
+        if (nPlayer == 1) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                nDir = 2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                nDir = 3;
+            }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            nDir = 3;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            nJum = 1;
+        if (nPlayer == 2) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                nDir = 2;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                nDir = 3;
+            }
         }
         if (nJum == 0) {
             return nDir;
@@ -157,7 +154,7 @@ public class CharClass {
 
     boolean isHit(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
-        if ((((nX1 <= nX2+5) && (nX1 + nW1 + 5>= nX2))
+        if ((((nX1 <= nX2 + 5) && (nX1 + nW1 + 5 >= nX2))
                 || ((nX1 >= nX2) && (nX1 <= nX2 + nW2)))
                 && (((nY1 <= nY2) && (nY1 + nH1 >= nY2))
                 || ((nY1 >= nY2) && (nY1 <= nY2 + nH2)))) {
@@ -166,7 +163,7 @@ public class CharClass {
             return (false);
         }
     }
-   
+
     boolean isHitV(Vector2 v1, float nW1, float nH1, Vector2 v2, float nW2, float nH2) {
 
         if ((((v1.x <= v2.x) && (v1.x + nW1 >= v2.x))
@@ -195,8 +192,8 @@ public class CharClass {
 
     boolean isHitBlockT(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
 
-        if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
-                || ((nX1 >= nX2-1) && (nX1 <= nX2 + nS2 + 1)))
+        if ((((nX1 <= nX2 + 1) && (nX1 + nS1 >= nX2 - 1))
+                || ((nX1 >= nX2 - 1) && (nX1 <= nX2 + nS2 + 1)))
                 && ((nY1 >= nY2 + 5) && (nY1 <= nY2 + 5 + nS2))) {
             return true;
         }
