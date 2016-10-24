@@ -1,5 +1,7 @@
 package KarnMenuTest.Screens;
 
+import Buttons.TbsMenu;
+import Buttons.TbMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -9,9 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import KarnMenuTest.GdxMenu;
-import KarnMenuTest.TbMenu;
-import KarnMenuTest.TbsMenu;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 

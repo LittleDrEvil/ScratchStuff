@@ -54,8 +54,8 @@ public class CharClass {
 
     public void update() {
         //Gravity and Movement {
-        System.out.println(nJum);
-        System.out.println(fDy);
+//        System.out.println();
+//        System.out.println(fDy);
         fSY = vChar.y;
         fSX = vChar.x;
         dSpeed += dGravity;

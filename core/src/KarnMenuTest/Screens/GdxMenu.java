@@ -1,4 +1,4 @@
-package KarnMenuTest;
+package KarnMenuTest.Screens;
 import com.badlogic.gdx.Game;
 import KarnMenuTest.Screens.ScrMenu;
 import KarnMenuTest.Screens.ScrPlay;

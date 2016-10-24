@@ -1,4 +1,4 @@
-package KarnMenuTest;
+package Buttons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

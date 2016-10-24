@@ -1,5 +1,7 @@
 package KarnMenuTest.Screens;
 
+import Buttons.TbsMenu;
+import Buttons.TbMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -9,9 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import KarnMenuTest.GdxMenu;
-import KarnMenuTest.TbMenu;
-import KarnMenuTest.TbsMenu;
 import KarnMenuTest.Screens.BlockClass;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,7 +86,7 @@ public class ScrPlay implements Screen, InputProcessor {
 //        }
         for (int i = 0; i < nBlockSize; i++) {
             avB[i] = new Vector2();
-            vBlo.add(70*i, 40*(i+1));
+            vBlo.add(70*i, 90);
             avB[i].add(vBlo.x, vBlo.y);
             vBlo.add(-vBlo.x, -vBlo.y);
         }
@@ -116,6 +115,7 @@ public class ScrPlay implements Screen, InputProcessor {
         batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
         batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
         batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
+        
         if(charSonic.nPlayer == 1){
         charSonic.dGravity = -0.01;
         for (int i = 0; i < nBlockSize; i++) {
@@ -155,7 +155,7 @@ public class ScrPlay implements Screen, InputProcessor {
         for (int i = 0; i < nBlockSize; i++) {
             batch.draw(imgBlock, avB[i].x - fDist, avB[i].y, 30, 30);
         }
-        
+//        System.out.println(fDist);
         batch.end();
         
         

@@ -1,4 +1,4 @@
-package KarnMenuTest;
+package Buttons;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
