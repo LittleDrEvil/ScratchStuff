@@ -42,21 +42,30 @@ public class HitTestClass {
             }
             
         } 
-        
-        if(isHitBlockLR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+        if(isHitBlockB(chara.vChar.x, chara.vChar.y , 30 ,vBlock.x - fDist, vBlock.y , 30)){
             chara.dSpeed = 0;
             chara.nJum = 0;
-//            chara.vChar.x = chara.fSX- chara.fSx;
-//            System.out.println("lr");
-            if(chara.vChar.x <= vBlock.x - fDist){ chara.vChar.x = chara.fSX-2; System.out.println("left");}
-            
-            if(chara.vChar.x >= vBlock.x - fDist){ chara.vChar.x = chara.fSX+2; System.out.println("right");}
-            
+            chara.vChar.y = chara.fSY;
+            chara.fDy*=-1;
+            System.out.println("bottum");   
+        }
+
+        if(isHitBlockL(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+            chara.dSpeed = 0;
+            chara.vChar.x = chara.fSX-1;
+            System.out.println("left");
+            chara.dCharSpeed = 0;
             chara.fSx = 0;
             chara.dGravity = 0;
-//            System.out.println("side");
-        } 
-        
+        }
+        if(isHitBlockR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+            chara.dSpeed = 0;
+            chara.vChar.x = chara.fSX+1;
+            System.out.println("right");
+            chara.dCharSpeed = 0;
+            chara.fSx = 0;
+            chara.dGravity = 0;
+        }
         
         if (chara.vChar.x < 0 && fDist <= 125) {
             chara.vChar.x += chara.fSx;
@@ -66,6 +75,19 @@ public class HitTestClass {
             chara.vChar.x = 126;
         }
         return chara;
+        //        if(isHitBlockLR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+//            chara.dSpeed = 0;
+////            chara.nJum = 0;
+////            chara.vChar.x = chara.fSX- chara.fSx;
+////            System.out.println("lr");
+//            if(chara.vChar.x <= vBlock.x - fDist){ chara.vChar.x = chara.fSX-2; System.out.println("left");}
+//            
+//            if(chara.vChar.x >= vBlock.x - fDist){ chara.vChar.x = chara.fSX+2; System.out.println("right");}
+//            
+//            chara.fSx = 0;
+//            chara.dGravity = 0;
+////            System.out.println("side");
+//        } 
     }
 
     boolean isHit(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
@@ -102,16 +124,39 @@ public class HitTestClass {
         }
         return false;
     }
+    boolean isHitBlockR(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+
+        if ((((nX1 >= nX2) && (nX1 <= nX2 + nS2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
+                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
+            return true;
+        }
+        return false;
+    }
+    boolean isHitBlockL(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+
+        if ((((nX1 <= nX2) && (nX1 + nS1 >= nX2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
+                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
+            return true;
+        }
+        return false;
+    }
 
     boolean isHitBlockT(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
 
         if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
                 || ((nX1 >= nX2-1) && (nX1 <= nX2 + nS2 + 1)))
                 && ((nY1 >= nY2 + 5) && (nY1 <= nY2 + 5 + nS2))) {
-//        if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
-//                || ((nX1 >= nX2-1) && (nX1 <= nX2 + nS2+1)))
-//                && (((nY1 <= nY2) && (nY1 + nS1 >= nY2))
-//                || ((nY1 >= nY2 + 3) && (nY1 <= nY2 + nS2 + 3)))) {
+            return true;
+        }
+        return false;
+    }
+    boolean isHitBlockB(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+
+        if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
+                || ((nX1 >= nX2-1) && (nX1 - 1 <= nX2 + nS2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3)))) {
             return true;
         }
         return false;

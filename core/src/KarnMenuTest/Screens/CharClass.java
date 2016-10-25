@@ -7,38 +7,38 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-public class CharClass {
+public class CharClass extends Sprite {
 
     int nPlayer;
     Vector2 vChar = new Vector2();
     Vector2 vFloor = new Vector2();
     Sprite sprChar;
     public Animation aniChar[] = new Animation[6];
-    TextureAtlas textureAtlas1;
+    TextureAtlas[] artextureAtlas;
     int nDir = 0, nJum;
     float x, y = 100, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
-    double dSpeed, dGravity = -0.01;
+    double dSpeed, dGravity = -0.01, dCharSpeed;
     Vector2[] avB;
     int nBlockSize = 10;
     Vector2 vBlo;
 
     public void charMain(String sCharacter, int _nPlayer) {
-
+        artextureAtlas  = new TextureAtlas[6];
         nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
-        aniChar[0] = new Animation(1 / 15f, textureAtlas1.getRegions());
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "StillLeft.pack"));
-        aniChar[1] = new Animation(1 / 15f, textureAtlas1.getRegions());
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "RunLeft.pack"));
-        aniChar[2] = new Animation(1 / 30f, textureAtlas1.getRegions());
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "RunRight.pack"));
-        aniChar[3] = new Animation(1 / 30f, textureAtlas1.getRegions());
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpLeft.pack"));
-        aniChar[4] = new Animation(1 / 15f, textureAtlas1.getRegions());
-        textureAtlas1 = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
-        aniChar[5] = new Animation(1 / 15f, textureAtlas1.getRegions());
+        artextureAtlas[0] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
+        aniChar[0] = new Animation(1 / 15f, artextureAtlas[0].getRegions());
+        artextureAtlas[1] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillLeft.pack"));
+        aniChar[1] = new Animation(1 / 15f, artextureAtlas[1].getRegions());
+        artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "RunLeft.pack"));
+        aniChar[2] = new Animation(1 / 30f, artextureAtlas[2].getRegions());
+        artextureAtlas[3] = new TextureAtlas(Gdx.files.internal(sCharacter + "RunRight.pack"));
+        aniChar[3] = new Animation(1 / 30f, artextureAtlas[3].getRegions());
+        artextureAtlas[4] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpLeft.pack"));
+        aniChar[4] = new Animation(1 / 15f, artextureAtlas[4].getRegions());
+        artextureAtlas[5] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
+        aniChar[5] = new Animation(1 / 15f, artextureAtlas[5].getRegions());
 
 
         vBlo = new Vector2();
@@ -56,6 +56,7 @@ public class CharClass {
         //Gravity and Movement {
 //        System.out.println();
 //        System.out.println(fDy);
+        dCharSpeed = 0.2;
         fSY = vChar.y;
         fSX = vChar.x;
         dSpeed += dGravity;
@@ -87,10 +88,10 @@ public class CharClass {
         }
         if (nPlayer == 2) {
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                fSx += 0.2;
+                fSx += dCharSpeed;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                fSx -= 0.2;
+                fSx -= dCharSpeed;
             }
             if (nJum == 0) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
