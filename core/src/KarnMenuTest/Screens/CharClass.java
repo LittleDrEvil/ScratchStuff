@@ -2,31 +2,49 @@ package KarnMenuTest.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class CharClass extends Sprite {
-
+    Array<Sprite> arSprites;
     int nPlayer;
     Vector2 vChar = new Vector2();
     Vector2 vFloor = new Vector2();
     Sprite sprChar;
     public Animation aniChar[] = new Animation[6];
     TextureAtlas[] artextureAtlas;
+    Texture[] texture;
     int nDir = 0, nJum;
     float x, y = 100, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
-    double dSpeed, dGravity = -0.01, dCharSpeed;
+    double dSpeed, dGravity, dCharSpeed;
     Vector2[] avB;
-    int nBlockSize = 10;
+    int nBlockSize = 10, nW, nH;
     Vector2 vBlo;
-
+    Sprite[] arSpri;
+    float fDist;
+    
     public void charMain(String sCharacter, int _nPlayer) {
+        arSpri = new Sprite[10];
+        for (int i = 0; i < 10; i++) {
+            arSpri[i] = new Sprite();
+        }
+        
         artextureAtlas  = new TextureAtlas[6];
         nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
+        /* Coordinates with nDir, 
+        0 is StillRight,
+        1 is StillLeft,
+        2 is RunLeft,
+        3 is RunRight,
+        4 is JumpLeft,
+        5 is JumpRight,
+        */
         artextureAtlas[0] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
         aniChar[0] = new Animation(1 / 15f, artextureAtlas[0].getRegions());
         artextureAtlas[1] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillLeft.pack"));
@@ -50,12 +68,13 @@ public class CharClass extends Sprite {
             avB[i].add(vBlo.x, vBlo.y);
             vBlo.add(-vBlo.x, -vBlo.y);
         }
+        nW = 30; nH = 27;
     }
 
     public void update() {
-        //Gravity and Movement {
-//        System.out.println();
-//        System.out.println(fDy);
+        //        Gravity and Movement {
+        arSprites = artextureAtlas[0].createSprites();
+        fDist+=fSx;
         dCharSpeed = 0.2;
         fSY = vChar.y;
         fSX = vChar.x;
@@ -83,6 +102,7 @@ public class CharClass extends Sprite {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                     fDy = 4;
                     nJum = 1;
+                    System.out.println("up");
                 }
             }
         }

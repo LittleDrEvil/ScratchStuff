@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class BlockClass {
-       
+    Vector2 vBlock;
+       void BlockClass(Vector2 vBlock_){
+           vBlock = vBlock_;
+       }
 
 }

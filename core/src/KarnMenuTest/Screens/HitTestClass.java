@@ -24,25 +24,20 @@ public class HitTestClass {
             chara.dSpeed = 0;
             chara.nJum = 0;
             chara.dGravity = 0;
-            chara.vChar.y = 40 - chara.fDy;
+            chara.vChar.y = 40;
+            chara.fDy = 0;
         } 
         
         
-        if(isHitBlockT(chara.vChar.x, chara.vChar.y , 30 ,vBlock.x - fDist, vBlock.y , 30)){
-            
+        if(isHitBlockT(chara.vChar.x, chara.vChar.y , chara.nH ,vBlock.x - fDist, vBlock.y , 30)){
             chara.dSpeed = 0;
             chara.nJum = 0;
-            chara.vChar.y = vBlock.y + 30 - chara.fDy;
-            chara.dGravity = 0.00;
-            if(chara.vChar.y < vBlock.y){
-                System.out.println("bottum");
-            }
-            if(chara.vChar.y > vBlock.y+30){
-                System.out.println("top");
-            }
+            chara.dGravity = 0;
+            chara.vChar.y = vBlock.y + 32;
+            chara.fDy = 0;
             
         } 
-        if(isHitBlockB(chara.vChar.x, chara.vChar.y , 30 ,vBlock.x - fDist, vBlock.y , 30)){
+        if(isHitBlockB(chara.vChar.x, chara.vChar.y , chara.nH ,vBlock.x - fDist, vBlock.y , 30)){
             chara.dSpeed = 0;
             chara.nJum = 0;
             chara.vChar.y = chara.fSY;
@@ -50,7 +45,7 @@ public class HitTestClass {
             System.out.println("bottum");   
         }
 
-        if(isHitBlockL(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+        if(isHitBlockL(chara.vChar.x, chara.vChar.y, chara.nW, chara.nH, vBlock.x - fDist, vBlock.y, 30, 30)){
             chara.dSpeed = 0;
             chara.vChar.x = chara.fSX-1;
             System.out.println("left");
@@ -58,7 +53,7 @@ public class HitTestClass {
             chara.fSx = 0;
             chara.dGravity = 0;
         }
-        if(isHitBlockR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
+        if(isHitBlockR(chara.vChar.x, chara.vChar.y, chara.nW, chara.nH, vBlock.x - fDist, vBlock.y, 30, 30)){
             chara.dSpeed = 0;
             chara.vChar.x = chara.fSX+1;
             System.out.println("right");
@@ -114,30 +109,30 @@ public class HitTestClass {
         }
     }
 
-    boolean isHitBlockLR(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+    boolean isHitBlockLR(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
-        if ((((nX1 <= nX2) && (nX1 + nS1 >= nX2))
-                || ((nX1 >= nX2) && (nX1 <= nX2 + nS2)))
-                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
-                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
+        if ((((nX1 <= nX2) && (nX1 + nW1 >= nX2))
+                || ((nX1 >= nX2) && (nX1 <= nX2 + nW2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nH1 >= nY2 - 3))
+                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nH2 - 3)))) {
             return true;
         }
         return false;
     }
-    boolean isHitBlockR(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+    boolean isHitBlockR(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
-        if ((((nX1 >= nX2) && (nX1 <= nX2 + nS2)))
-                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
-                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
+        if ((((nX1 >= nX2) && (nX1 <= nX2 + nW2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nH1 >= nY2 - 3))
+                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nH2 - 3)))) {
             return true;
         }
         return false;
     }
-    boolean isHitBlockL(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
+    boolean isHitBlockL(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
-        if ((((nX1 <= nX2) && (nX1 + nS1 >= nX2)))
-                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
-                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
+        if ((((nX1 <= nX2) && (nX1 + nW1 >= nX2)))
+                && (((nY1 <= nY2 - 3) && (nY1 + nH1 >= nY2 - 3))
+                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nH2 - 3)))) {
             return true;
         }
         return false;
@@ -154,8 +149,8 @@ public class HitTestClass {
     }
     boolean isHitBlockB(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
 
-        if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
-                || ((nX1 >= nX2-1) && (nX1 - 1 <= nX2 + nS2)))
+        if ((((nX1 <= nX2+2) && (nX1 + nS1 >= nX2-2))
+                || ((nX1 >= nX2-1) && (nX1 + 2 <= nX2 + nS2)))
                 && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3)))) {
             return true;
         }

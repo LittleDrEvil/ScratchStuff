@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
 
 /**
@@ -44,13 +45,16 @@ public class ScrPlay implements Screen, InputProcessor {
     Vector2 vSonic;
     boolean bPass=false;
     int nBlockSize=10;
-    
+    Array<Sprite> arSprites;
+    BlockClass bBlocks[];
+    ArrayList<BlockClass> alBlocks;
     public ScrPlay(GdxMenu _gdxMenu) { 
 //Referencing the main class.
         gdxMenu = _gdxMenu;
     }
 
     public void show() {
+        bBlocks = new BlockClass[nBlockSize];
         avB = new Vector2[nBlockSize];
         batch = new SpriteBatch();
         imgBack = new Texture(Gdx.files.internal("background.png"));
@@ -86,9 +90,11 @@ public class ScrPlay implements Screen, InputProcessor {
 //            alBlocks.add(bBlock[i]);
 //        }
         for (int i = 0; i < nBlockSize; i++) {
+            bBlocks[i] = new BlockClass();
             avB[i] = new Vector2();
-            vBlo.add(70*i, 50);
+            vBlo.add(100*i, 50);
             avB[i].add(vBlo.x, vBlo.y);
+            bBlocks[i].BlockClass(avB[i]);
             vBlo.add(-vBlo.x, -vBlo.y);
         }
 //        for (int i = nBlockSize/2; i < nBlockSize; i++) {
@@ -103,6 +109,7 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        arSprites = charSonic.artextureAtlas[nDir].createSprites();
         batch.begin();
         elapsedTime += Gdx.graphics.getDeltaTime();
         
@@ -119,28 +126,27 @@ public class ScrPlay implements Screen, InputProcessor {
         batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
         
         
-        charSonic.dGravity = -0.01;
-        for (int i = 0; i < nBlockSize; i++) {
-            charSonic = hitTest.HitTest(charSonic,avB[i], fDist);
-        }
-        nDir = charSonic.Direction();
-        Rectangle rect = charSonic.getBoundingRectangle();
-//        charSonic.setRotation(40);
+        
+        
+        nDir = charSonic.Direction();charSonic.dGravity = -0.01;
         charSonic.update();
+        
+        for (int i = 0; i < nBlockSize; i++) {
+            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
+        }
         batch.draw(charSonic.aniChar[nDir].getKeyFrame
                 (elapsedTime, true), charSonic.vChar.x, charSonic.vChar.y);
-        if(fDist > 0) {
+        if(charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
-        } else if (fDist<0) {
+        } else if (charSonic.fDist<0) {
             charSonic.fSx = 0;
-            fDist = 0;
+            charSonic.fDist = 0;
+            fBackX = 0;
         }
-        
-        fDist += charSonic.fSx;
-        System.out.println(fDist);
+        System.out.println(charSonic.vChar.y);
         
         for (int i = 0; i < nBlockSize; i++) {
-            batch.draw(imgBlock, avB[i].x - fDist, avB[i].y, 30, 30);
+            batch.draw(imgBlock, bBlocks[i].vBlock.x - charSonic.fDist, bBlocks[i].vBlock.y, 30, 30);
         }
         batch.end();
         
