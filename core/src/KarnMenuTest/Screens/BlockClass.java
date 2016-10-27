@@ -15,5 +15,9 @@ public class BlockClass {
        void BlockClass(Vector2 vBlock_){
            vBlock = vBlock_;
        }
-
+       boolean SideCheck(float fX, float fDist){
+           if(fX < fDist || fX + 10 > fDist) return true;
+           
+        return false;
+       }
 }

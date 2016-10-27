@@ -13,8 +13,56 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class HitTestClass {
     
-    public void HitTestClass(){
-        
+    public void HitTestClass(CharClass chara, float fDist){
+//        if (isHitV(chara.vChar, 30, 40, chara.vFloor, Gdx.graphics.getWidth(), 40)) {
+//            chara.dSpeed = 0;
+//            chara.nJum = 0;
+//            chara.dGravity = 0;
+//            chara.vChar.y = 40;
+//            chara.fDy = 0;
+//        } 
+//        
+//        
+//        if(isHitBlockT(chara.vChar.x, chara.vChar.y , chara.nH ,vBlock.x - fDist, vBlock.y , 30)){
+//            chara.dSpeed = 0;
+//            chara.nJum = 0;
+//            chara.dGravity = 0;
+//            chara.vChar.y = vBlock.y + 32;
+//            chara.fDy = 0;
+//            
+//        } 
+//        if(isHitBlockB(chara.vChar.x, chara.vChar.y , chara.nH ,vBlock.x - fDist, vBlock.y , 30)){
+//            chara.dSpeed = 0;
+//            chara.nJum = 0;
+//            chara.vChar.y = chara.fSY;
+//            chara.fDy*=-1;
+//            System.out.println("bottum");   
+//        }
+//
+//        if(isHitBlockL(chara.vChar.x, chara.vChar.y, chara.nW, chara.nH, vBlock.x - fDist, vBlock.y, 30, 30)){
+//            chara.dSpeed = 0;
+//            chara.vChar.x = chara.fSX-1;
+//            System.out.println("left");
+//            chara.dCharSpeed = 0;
+//            chara.fSx = 0;
+//            chara.dGravity = 0;
+//        }
+//        if(isHitBlockR(chara.vChar.x, chara.vChar.y, chara.nW, chara.nH, vBlock.x - fDist, vBlock.y, 30, 30)){
+//            chara.dSpeed = 0;
+//            chara.vChar.x = chara.fSX+1;
+//            System.out.println("right");
+//            chara.dCharSpeed = 0;
+//            chara.fSx = 0;
+//            chara.dGravity = 0;
+//        }
+//        
+//        if (chara.vChar.x < 0 && fDist <= 125) {
+//            chara.vChar.x += chara.fSx;
+//            chara.vChar.x = 1;
+//        } else if (chara.vChar.x < 125 && fDist > 125){
+//            chara.vChar.x += chara.fSx;
+//            chara.vChar.x = 126;
+//        }
     }
     
     

@@ -37,7 +37,7 @@ public class CharClass extends Sprite {
         nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
-        /* Coordinates with nDir, 
+        /* Cooperates with nDir, 
         0 is StillRight,
         1 is StillLeft,
         2 is RunLeft,
@@ -121,16 +121,12 @@ public class CharClass extends Sprite {
             }
         }
         // }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            fSx = 100;
-        }
-
+        
+        //Stopping character at dead zones {
         if (vChar.x > Gdx.graphics.getWidth() - 150) {
             vChar.x -= fSx;
             vChar.x = Gdx.graphics.getWidth() - 149;
         }
-        
         vChar.add(fSx, fDy);
         // }
     }

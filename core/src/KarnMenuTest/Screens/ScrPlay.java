@@ -43,11 +43,15 @@ public class ScrPlay implements Screen, InputProcessor {
     float fSY, fSX, fBX=50, fBY=50, fX, fY, fBackX, fDist;
     double dGravity, dSpeed;
     Vector2 vSonic;
-    boolean bPass=false;
-    int nBlockSize=10;
+    boolean bLeft;
+    int nBlockSize=1000;
     Array<Sprite> arSprites;
     BlockClass bBlocks[];
     ArrayList<BlockClass> alBlocks;
+    int nAd=0, nAdd=40;
+    
+    
+    
     public ScrPlay(GdxMenu _gdxMenu) { 
 //Referencing the main class.
         gdxMenu = _gdxMenu;
@@ -92,7 +96,7 @@ public class ScrPlay implements Screen, InputProcessor {
         for (int i = 0; i < nBlockSize; i++) {
             bBlocks[i] = new BlockClass();
             avB[i] = new Vector2();
-            vBlo.add(100*i, 50);
+            vBlo.add(30*i, 40);
             avB[i].add(vBlo.x, vBlo.y);
             bBlocks[i].BlockClass(avB[i]);
             vBlo.add(-vBlo.x, -vBlo.y);
@@ -110,20 +114,24 @@ public class ScrPlay implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         arSprites = charSonic.artextureAtlas[nDir].createSprites();
+        charSonic.x = charSonic.vChar.x;
+        charSonic.y = charSonic.vChar.y;
+
         batch.begin();
+        
         elapsedTime += Gdx.graphics.getDeltaTime();
         
         if((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())){
             fBackX=0;
         }
-        batch.disableBlending();
+//        batch.disableBlending();
         
         batch.draw(imgBack, fBackX, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(imgBack, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(imgBack, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
-        batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
-        batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
+//        batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
+//        batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
+//        batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
         
         
         
@@ -132,10 +140,10 @@ public class ScrPlay implements Screen, InputProcessor {
         charSonic.update();
         
         for (int i = 0; i < nBlockSize; i++) {
+            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist))
             charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
         }
-        batch.draw(charSonic.aniChar[nDir].getKeyFrame
-                (elapsedTime, true), charSonic.vChar.x, charSonic.vChar.y);
+        batch.draw(charSonic.aniChar[nDir].getKeyFrame(elapsedTime, true), charSonic.x, charSonic.y);
         if(charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
         } else if (charSonic.fDist<0) {
@@ -146,12 +154,34 @@ public class ScrPlay implements Screen, InputProcessor {
         System.out.println(charSonic.vChar.y);
         
         for (int i = 0; i < nBlockSize; i++) {
+            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist))
             batch.draw(imgBlock, bBlocks[i].vBlock.x - charSonic.fDist, bBlocks[i].vBlock.y, 30, 30);
         }
-        batch.end();
         
+        for (int i = 0; i < arSprites.size; i++) {
+            System.out.println(arSprites.size);
+            Sprite spr;
+            spr = (arSprites.get(i));
             
-        
+            if(i==arSprites.size/2) nAdd*=-1;
+            nAd += nAdd;
+            spr.setY(nAd);
+            spr.setX(nAd+ 100);
+            spr.rotate(40*i);
+//            spr.setX(charSonic.vChar.x);
+//            spr.setY(charSonic.vChar.y);
+//            if(nDir == 1 || nDir == 2 || nDir == 4){
+//            spr.flip(false,true);
+//            }
+            Rectangle rect = spr.getBoundingRectangle();
+            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){
+                
+            }
+            
+            spr.draw(batch);
+            
+        }
+        batch.end();
     }
 
     public void btnGameoverListener() {
