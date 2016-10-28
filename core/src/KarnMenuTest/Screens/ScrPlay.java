@@ -44,7 +44,7 @@ public class ScrPlay implements Screen, InputProcessor {
     double dGravity, dSpeed;
     Vector2 vSonic;
     boolean bLeft;
-    int nBlockSize=1000;
+    int nBlockSize=10;
     Array<Sprite> arSprites;
     BlockClass bBlocks[];
     ArrayList<BlockClass> alBlocks;
@@ -81,34 +81,15 @@ public class ScrPlay implements Screen, InputProcessor {
         btnGameoverListener();
         vBlo = new Vector2();
         
-        
-//        for (int i = 0; i < nBlockSize/4; i++) {
-//            
-//            avB[i] = new Vector2();
-//            bBlock[i] = new BlockClass();
-//            
-//            vBlo.add(30*(i), 50);
-//            avB[i].add(vBlo.x, vBlo.y);
-//            bBlock[i].BlockClass();
-//            vBlo.add(-vBlo.x, -vBlo.y);
-//            alBlocks.add(bBlock[i]);
-//        }
         for (int i = 0; i < nBlockSize; i++) {
             bBlocks[i] = new BlockClass();
             avB[i] = new Vector2();
             vBlo.add(30*i, 40);
             avB[i].add(vBlo.x, vBlo.y);
-            bBlocks[i].BlockClass(avB[i]);
+            bBlocks[i].vBlock = avB[i];
             vBlo.add(-vBlo.x, -vBlo.y);
         }
-//        for (int i = nBlockSize/2; i < nBlockSize; i++) {
-//            avB[i] = new Vector2();
-//            
-//            vBlo.add(30*(i-nBlockSize/2), 200);
-//            
-//            avB[i].add(vBlo.x, vBlo.y);
-//            vBlo.add(-vBlo.x, -vBlo.y);
-//        }
+
     }
 
     @Override
@@ -124,26 +105,24 @@ public class ScrPlay implements Screen, InputProcessor {
         if((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())){
             fBackX=0;
         }
-//        batch.disableBlending();
+
         
         batch.draw(imgBack, fBackX, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(imgBack, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(imgBack, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        
 //        batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
 //        batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
 //        batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
+//        batch.disableBlending();
+
         
+        nDir = charSonic.Direction();
         
-        
-        
-        nDir = charSonic.Direction();charSonic.dGravity = -0.01;
         charSonic.update();
         
-        for (int i = 0; i < nBlockSize; i++) {
-            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist))
-            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
-        }
-        batch.draw(charSonic.aniChar[nDir].getKeyFrame(elapsedTime, true), charSonic.x, charSonic.y);
+//        batch.draw(charSonic.aniChar[nDir].getKeyFrame(elapsedTime, true), charSonic.x, charSonic.y);
         if(charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
         } else if (charSonic.fDist<0) {
@@ -151,36 +130,44 @@ public class ScrPlay implements Screen, InputProcessor {
             charSonic.fDist = 0;
             fBackX = 0;
         }
-        System.out.println(charSonic.vChar.y);
         
         for (int i = 0; i < nBlockSize; i++) {
-            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist))
+            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist)){
             batch.draw(imgBlock, bBlocks[i].vBlock.x - charSonic.fDist, bBlocks[i].vBlock.y, 30, 30);
+//            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
+            }
         }
-        
-        for (int i = 0; i < arSprites.size; i++) {
-            System.out.println(arSprites.size);
-            Sprite spr;
-            spr = (arSprites.get(i));
-            
-            if(i==arSprites.size/2) nAdd*=-1;
-            nAd += nAdd;
-            spr.setY(nAd);
-            spr.setX(nAd+ 100);
-            spr.rotate(40*i);
+        System.out.println(charSonic.y);
+        for (int i = 0; i < nBlockSize; i++) {
+            Sprite spr[] = new Sprite[arSprites.size];
+            for (int j = 0; j < arSprites.size; j++) {
+                spr[j] = (arSprites.get(j));
+                spr[j].setX(charSonic.vChar.x);
+                spr[j].setY(charSonic.vChar.y);
+                
+                if(hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)){
+                    charSonic.dSpeed = 0;
+                    charSonic.nJum = 0;
+                    charSonic.dGravity = 0;
+                    charSonic.vChar.y = bBlocks[i].vBlock.y + 32;
+                    charSonic.fDy = 0;
+                }
+                spr[j].setX(charSonic.vChar.x);
+                spr[j].setY(charSonic.vChar.y);
+                spr[j].draw(batch);
+                
+            }
+//            System.out.println(arSprites.size);
 //            spr.setX(charSonic.vChar.x);
 //            spr.setY(charSonic.vChar.y);
 //            if(nDir == 1 || nDir == 2 || nDir == 4){
 //            spr.flip(false,true);
 //            }
-            Rectangle rect = spr.getBoundingRectangle();
-            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){
-                
-            }
-            
-            spr.draw(batch);
-            
+//            Rectangle rect = spr.getBoundingRectangle();
+//            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){ 
+//            }
         }
+        charSonic.dGravity = -0.01;
         batch.end();
     }
 

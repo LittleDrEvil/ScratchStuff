@@ -5,6 +5,7 @@
 package KarnMenuTest.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -132,7 +133,16 @@ public class HitTestClass {
 ////            System.out.println("side");
 //        } 
     }
-
+    boolean isHitSB(Sprite spr, BlockClass bBlock, float fDist) {
+        if ((((spr.getX() <= bBlock.vBlock.x-fDist) && (spr.getX() + spr.getWidth() >= bBlock.vBlock.x-fDist))
+                || ((spr.getX() >= bBlock.vBlock.x-fDist) && (spr.getX() <= bBlock.vBlock.x + bBlock.nWidth - fDist)))
+                && (((spr.getY() <= bBlock.vBlock.y) && (spr.getY() + spr.getHeight() >= bBlock.vBlock.y))
+                || ((spr.getY() >= bBlock.vBlock.y) && (spr.getY() <= bBlock.vBlock.y + bBlock.nWidth)))) {
+            return true;
+        } else {
+            return (false);
+        }
+    }
     boolean isHit(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
         if ((((nX1 <= nX2+5) && (nX1 + nW1 + 5>= nX2))
@@ -144,7 +154,6 @@ public class HitTestClass {
             return (false);
         }
     }
-   
     boolean isHitV(Vector2 v1, float nW1, float nH1, Vector2 v2, float nW2, float nH2) {
 
         if ((((v1.x <= v2.x) && (v1.x + nW1 >= v2.x))
@@ -156,7 +165,6 @@ public class HitTestClass {
             return (false);
         }
     }
-
     boolean isHitBlockLR(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
 
         if ((((nX1 <= nX2) && (nX1 + nW1 >= nX2))
@@ -185,7 +193,6 @@ public class HitTestClass {
         }
         return false;
     }
-
     boolean isHitBlockT(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
 
         if ((((nX1 <= nX2+1) && (nX1 + nS1 >= nX2-1))
