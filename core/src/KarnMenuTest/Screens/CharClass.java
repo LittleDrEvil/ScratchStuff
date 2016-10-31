@@ -51,7 +51,7 @@ public class CharClass extends Sprite {
         aniChar[1] = new Animation(1 / 15f, artextureAtlas[1].getRegions());
         artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "RunLeft.pack"));
         aniChar[2] = new Animation(1 / 30f, artextureAtlas[2].getRegions());
-        artextureAtlas[3] = new TextureAtlas(Gdx.files.internal(sCharacter + "RunRight.pack"));
+        artextureAtlas[3] = new TextureAtlas(Gdx.files.internal(sCharacter + "Run2.atlas"));
         aniChar[3] = new Animation(1 / 30f, artextureAtlas[3].getRegions());
         artextureAtlas[4] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpLeft.pack"));
         aniChar[4] = new Animation(1 / 15f, artextureAtlas[4].getRegions());
@@ -90,7 +90,9 @@ public class CharClass extends Sprite {
         if (fSx <= 0) {
             fSx += 0.1;
         }
-        
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                dGravity = -0.01;
+            }
         if (nPlayer == 1) {
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 fSx += 0.2;

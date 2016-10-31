@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Luke on 2016-04-05.
@@ -137,25 +139,35 @@ public class ScrPlay implements Screen, InputProcessor {
 //            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
             }
         }
+        
         System.out.println(charSonic.y);
-        for (int i = 0; i < nBlockSize; i++) {
-            Sprite spr[] = new Sprite[arSprites.size];
-            for (int j = 0; j < arSprites.size; j++) {
-                spr[j] = (arSprites.get(j));
+        System.out.println(charSonic.fDy);
+        Sprite spr[] = new Sprite[arSprites.size];
+        for (int j = 0; j < arSprites.size; j++) {
+            
+            spr[j] = (arSprites.get(j));
+            
+//            spr[j].setV(charSonic.vChar);
+                for (int i = 0; i < nBlockSize; i++) {
+                    if(hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)){
+                        charSonic.dSpeed = 0;
+                        charSonic.nJum = 0;
+                        charSonic.dGravity = 0;
+                        charSonic.vChar.y = bBlocks[i].vBlock.y + 32;
+                        charSonic.fDy = 0;
+                    }// else charSonic.dGravity = -0.01;
+                    
+                    if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+                        charSonic.fDy = 0;
+                        charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
+                        charSonic.vChar.x = Gdx.input.getX();
+                    }
                 spr[j].setX(charSonic.vChar.x);
                 spr[j].setY(charSonic.vChar.y);
                 
-                if(hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)){
-                    charSonic.dSpeed = 0;
-                    charSonic.nJum = 0;
-                    charSonic.dGravity = 0;
-                    charSonic.vChar.y = bBlocks[i].vBlock.y + 32;
-                    charSonic.fDy = 0;
-                }
-                spr[j].setX(charSonic.vChar.x);
-                spr[j].setY(charSonic.vChar.y);
                 spr[j].draw(batch);
-                
+//                charSonic.dGravity = -0.01;
+                System.out.println(Gdx.input.getY());
             }
 //            System.out.println(arSprites.size);
 //            spr.setX(charSonic.vChar.x);
@@ -167,7 +179,7 @@ public class ScrPlay implements Screen, InputProcessor {
 //            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){ 
 //            }
         }
-        charSonic.dGravity = -0.01;
+        
         batch.end();
     }
 
