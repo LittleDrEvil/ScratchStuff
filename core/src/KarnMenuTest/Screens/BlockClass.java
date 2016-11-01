@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class BlockClass {
     Vector2 vBlock;
-    int nWidth;
+    int nWidth=30;
        void BlockClass(Vector2 vBlock_, int nWidth_){
            vBlock = vBlock_;
            nWidth = nWidth_;

@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  * Created by Luke on 2016-04-05.
  */
 public class ScrPlay implements Screen, InputProcessor {
+
     HitTestClass hitTest = new HitTestClass();
     Vector2 vBlo;
     Vector2[] avB;
@@ -42,19 +43,17 @@ public class ScrPlay implements Screen, InputProcessor {
     private float elapsedTime = 0;
     Texture imgFloor, imgBack, imgBlock;
     int nJum, nDir = 0, nAniCurr;
-    float fSY, fSX, fBX=50, fBY=50, fX, fY, fBackX, fDist;
+    float fSY, fSX, fBX = 50, fBY = 50, fX, fY, fBackX, fDist;
     double dGravity, dSpeed;
     Vector2 vSonic;
     boolean bLeft;
-    int nBlockSize=10;
+    int nBlockSize = 10;
     Array<Sprite> arSprites;
     BlockClass bBlocks[];
     ArrayList<BlockClass> alBlocks;
-    int nAd=0, nAdd=40;
-    
-    
-    
-    public ScrPlay(GdxMenu _gdxMenu) { 
+    int nAd = 0, nAdd = 40;
+
+    public ScrPlay(GdxMenu _gdxMenu) {
 //Referencing the main class.
         gdxMenu = _gdxMenu;
     }
@@ -82,11 +81,11 @@ public class ScrPlay implements Screen, InputProcessor {
         btnMenuListener();
         btnGameoverListener();
         vBlo = new Vector2();
-        
+
         for (int i = 0; i < nBlockSize; i++) {
             bBlocks[i] = new BlockClass();
             avB[i] = new Vector2();
-            vBlo.add(30*i, 40);
+            vBlo.add(30 * i, 40);
             avB[i].add(vBlo.x, vBlo.y);
             bBlocks[i].vBlock = avB[i];
             vBlo.add(-vBlo.x, -vBlo.y);
@@ -96,79 +95,89 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        arSprites = charSonic.artextureAtlas[nDir].createSprites();
+        
         charSonic.x = charSonic.vChar.x;
         charSonic.y = charSonic.vChar.y;
 
         batch.begin();
-        
+
         elapsedTime += Gdx.graphics.getDeltaTime();
-        
-        if((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())){
-            fBackX=0;
+
+        if ((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())) {
+            fBackX = 0;
         }
 
-        
+
         batch.draw(imgBack, fBackX, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(imgBack, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(imgBack, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        
-        
+        batch.draw(imgBack, fBackX - Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(imgBack, fBackX + Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
 //        batch.draw(imgFloor, fBackX, 0, Gdx.graphics.getWidth(), 40);
 //        batch.draw(imgFloor, fBackX-Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
 //        batch.draw(imgFloor, fBackX+Gdx.graphics.getWidth(), 0, Gdx.graphics.getWidth(), 40);
 //        batch.disableBlending();
 
-        
+
         nDir = charSonic.Direction();
-        
+
         charSonic.update();
-        
+        charSonic.dGravity = -0.01;
 //        batch.draw(charSonic.aniChar[nDir].getKeyFrame(elapsedTime, true), charSonic.x, charSonic.y);
-        if(charSonic.fDist > 0) {
+        if (charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
-        } else if (charSonic.fDist<0) {
+        } else if (charSonic.fDist < 0) {
             charSonic.fSx = 0;
             charSonic.fDist = 0;
             fBackX = 0;
         }
-        
+
         for (int i = 0; i < nBlockSize; i++) {
-            if(bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist)){
-            batch.draw(imgBlock, bBlocks[i].vBlock.x - charSonic.fDist, bBlocks[i].vBlock.y, 30, 30);
+            if (bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist)) {
+                batch.draw(imgBlock, bBlocks[i].vBlock.x - charSonic.fDist, bBlocks[i].vBlock.y, 30, 30);
 //            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
             }
         }
-        
-        System.out.println(charSonic.y);
+
+//        System.out.println(charSonic.y);
+        if(nDir == 0 || nDir == 1)
+        arSprites = charSonic.artextureAtlas[0].createSprites();
+        if(nDir == 2 || nDir == 3)
+        arSprites = charSonic.artextureAtlas[1].createSprites();
+        if(nDir == 4 || nDir == 5)
+        arSprites = charSonic.artextureAtlas[2].createSprites();
         System.out.println(charSonic.fDy);
+        if(charSonic.fDy != 0){
+                arSprites = charSonic.artextureAtlas[2].createSprites();
+        }
+        
         Sprite spr[] = new Sprite[arSprites.size];
         for (int j = 0; j < arSprites.size; j++) {
-            
             spr[j] = (arSprites.get(j));
-            
-//            spr[j].setV(charSonic.vChar);
-                for (int i = 0; i < nBlockSize; i++) {
-                    if(hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)){
-                        charSonic.dSpeed = 0;
-                        charSonic.nJum = 0;
-                        charSonic.dGravity = 0;
-                        charSonic.vChar.y = bBlocks[i].vBlock.y + 32;
-                        charSonic.fDy = 0;
-                    }// else charSonic.dGravity = -0.01;
-                    
-                    if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-                        charSonic.fDy = 0;
-                        charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
-                        charSonic.vChar.x = Gdx.input.getX();
-                    }
+            spr[j].setX(charSonic.vChar.x);
+            spr[j].setY(charSonic.vChar.y);
+            for (int i = 0; i < nBlockSize; i++) {
+                charSonic = hitTest.Hit(spr[j], bBlocks[i].vBlock, charSonic.fDist, charSonic);
+//                    if (hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)) {
+//                        charSonic.dSpeed = 0;
+//                        charSonic.nJum = 0;
+//                        charSonic.vChar.y = bBlocks[i].vBlock.y+30;
+//                        charSonic.fDy = 0;
+//                        System.out.println("hit");
+//                    } 
+                
+                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    charSonic.dSpeed = 0;
+                    charSonic.fDy = 0;
+                    charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
+                    charSonic.vChar.x = Gdx.input.getX();
+                }
+            }
                 spr[j].setX(charSonic.vChar.x);
                 spr[j].setY(charSonic.vChar.y);
-                
-                spr[j].draw(batch);
-//                charSonic.dGravity = -0.01;
-                System.out.println(Gdx.input.getY());
-            }
+                if(nDir == 1 || nDir == 2 || nDir == 4) spr[j].flip(true, false);
+//                spr[j].draw(batch);
+                batch.draw(spr[j], spr[j].getX(), spr[j].getY());
 //            System.out.println(arSprites.size);
 //            spr.setX(charSonic.vChar.x);
 //            spr.setY(charSonic.vChar.y);
@@ -179,7 +188,7 @@ public class ScrPlay implements Screen, InputProcessor {
 //            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){ 
 //            }
         }
-        
+
         batch.end();
     }
 
@@ -203,27 +212,22 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void dispose() {
-
     }
 
     @Override

@@ -10,12 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class CharClass extends Sprite {
-    Array<Sprite> arSprites;
     int nPlayer;
     Vector2 vChar = new Vector2();
     Vector2 vFloor = new Vector2();
     Sprite sprChar;
-    public Animation aniChar[] = new Animation[6];
+    public Animation aniChar[] = new Animation[3];
     TextureAtlas[] artextureAtlas;
     Texture[] texture;
     int nDir = 0, nJum;
@@ -33,7 +32,7 @@ public class CharClass extends Sprite {
             arSpri[i] = new Sprite();
         }
         
-        artextureAtlas  = new TextureAtlas[6];
+        artextureAtlas  = new TextureAtlas[3];
         nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
@@ -47,16 +46,10 @@ public class CharClass extends Sprite {
         */
         artextureAtlas[0] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
         aniChar[0] = new Animation(1 / 15f, artextureAtlas[0].getRegions());
-        artextureAtlas[1] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillLeft.pack"));
-        aniChar[1] = new Animation(1 / 15f, artextureAtlas[1].getRegions());
-        artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "RunLeft.pack"));
-        aniChar[2] = new Animation(1 / 30f, artextureAtlas[2].getRegions());
-        artextureAtlas[3] = new TextureAtlas(Gdx.files.internal(sCharacter + "Run2.atlas"));
-        aniChar[3] = new Animation(1 / 30f, artextureAtlas[3].getRegions());
-        artextureAtlas[4] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpLeft.pack"));
-        aniChar[4] = new Animation(1 / 15f, artextureAtlas[4].getRegions());
-        artextureAtlas[5] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
-        aniChar[5] = new Animation(1 / 15f, artextureAtlas[5].getRegions());
+        artextureAtlas[1] = new TextureAtlas(Gdx.files.internal(sCharacter + "Run2.atlas"));
+        aniChar[1] = new Animation(1 / 30f, artextureAtlas[1].getRegions());
+        artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
+        aniChar[2] = new Animation(1 / 15f, artextureAtlas[2].getRegions());
 
 
         vBlo = new Vector2();
@@ -73,7 +66,6 @@ public class CharClass extends Sprite {
 
     public void update() {
         //        Gravity and Movement {
-        arSprites = artextureAtlas[0].createSprites();
         fDist+=fSx;
         dCharSpeed = 0.2;
         fSY = vChar.y;
@@ -104,6 +96,7 @@ public class CharClass extends Sprite {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                     fDy = 4;
                     nJum = 1;
+                    dGravity = -0.01;
                     System.out.println("up");
                 }
             }
