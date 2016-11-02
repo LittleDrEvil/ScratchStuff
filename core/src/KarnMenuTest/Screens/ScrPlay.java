@@ -51,7 +51,7 @@ public class ScrPlay implements Screen, InputProcessor {
     Array<Sprite> arSprites;
     BlockClass bBlocks[];
     ArrayList<BlockClass> alBlocks;
-    int nAd = 0, nAdd = 40;
+    int nAd = 0, nAdd = 40, nWhatSprite=0;
 
     public ScrPlay(GdxMenu _gdxMenu) {
 //Referencing the main class.
@@ -126,11 +126,12 @@ public class ScrPlay implements Screen, InputProcessor {
 //        batch.draw(charSonic.aniChar[nDir].getKeyFrame(elapsedTime, true), charSonic.x, charSonic.y);
         if (charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
-        } else if (charSonic.fDist < 0) {
-            charSonic.fSx = 0;
-            charSonic.fDist = 0;
-            fBackX = 0;
-        }
+        } 
+//        else if (charSonic.fDist < 0) {
+//            charSonic.fSx = 0;
+//            charSonic.fDist = 0;
+//            fBackX = 0;
+//        }
 
         for (int i = 0; i < nBlockSize; i++) {
             if (bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist)) {
@@ -138,57 +139,74 @@ public class ScrPlay implements Screen, InputProcessor {
 //            charSonic = hitTest.HitTest(charSonic, bBlocks[i].vBlock, charSonic.fDist);
             }
         }
+        
+        
 
 //        System.out.println(charSonic.y);
         if(nDir == 0 || nDir == 1)
-        arSprites = charSonic.artextureAtlas[0].createSprites();
+            arSprites = charSonic.artextureAtlas[0].createSprites();
         if(nDir == 2 || nDir == 3)
-        arSprites = charSonic.artextureAtlas[1].createSprites();
+            arSprites = charSonic.artextureAtlas[1].createSprites();
         if(nDir == 4 || nDir == 5)
-        arSprites = charSonic.artextureAtlas[2].createSprites();
-        System.out.println(charSonic.fDy);
-        if(charSonic.fDy != 0){
-                arSprites = charSonic.artextureAtlas[2].createSprites();
-        }
+            arSprites = charSonic.artextureAtlas[2].createSprites();
         
-        Sprite spr[] = new Sprite[arSprites.size];
-        for (int j = 0; j < arSprites.size; j++) {
-            spr[j] = (arSprites.get(j));
-            spr[j].setX(charSonic.vChar.x);
-            spr[j].setY(charSonic.vChar.y);
-            for (int i = 0; i < nBlockSize; i++) {
-                charSonic = hitTest.Hit(spr[j], bBlocks[i].vBlock, charSonic.fDist, charSonic);
-//                    if (hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)) {
-//                        charSonic.dSpeed = 0;
-//                        charSonic.nJum = 0;
-//                        charSonic.vChar.y = bBlocks[i].vBlock.y+30;
-//                        charSonic.fDy = 0;
-//                        System.out.println("hit");
-//                    } 
-                
-                if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                    charSonic.dSpeed = 0;
-                    charSonic.fDy = 0;
-                    charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight();
-                    charSonic.vChar.x = Gdx.input.getX();
-                }
-            }
-                spr[j].setX(charSonic.vChar.x);
-                spr[j].setY(charSonic.vChar.y);
-                if(nDir == 1 || nDir == 2 || nDir == 4) spr[j].flip(true, false);
-//                spr[j].draw(batch);
-                batch.draw(spr[j], spr[j].getX(), spr[j].getY());
-//            System.out.println(arSprites.size);
-//            spr.setX(charSonic.vChar.x);
-//            spr.setY(charSonic.vChar.y);
-//            if(nDir == 1 || nDir == 2 || nDir == 4){
-//            spr.flip(false,true);
-//            }
-//            Rectangle rect = spr.getBoundingRectangle();
-//            if(hitTest.isHit(bBlocks[i].vBlock.x, bBlocks[i].vBlock.y, 30,30 , charSonic.vChar.x, charSonic.vChar.y, rect.width, rect.height)){ 
-//            }
+        if(charSonic.fDy != 0){
+            arSprites = charSonic.artextureAtlas[2].createSprites();
         }
-
+//        for (int j = 0; j < arSprites.size; j++) {
+//            spr[j] = (arSprites.get(j));
+//            spr[j].setX(charSonic.vChar.x);
+//            spr[j].setY(charSonic.vChar.y);
+//            for (int i = 0; i < nBlockSize; i++) {
+//                charSonic = hitTest.Hit(spr[j], bBlocks[i].vBlock, charSonic.fDist, charSonic);
+////                    if (hitTest.isHitSB(spr[j], bBlocks[i], charSonic.fDist)) {
+////                        charSonic.dSpeed = 0;
+////                        charSonic.nJum = 0;
+////                        charSonic.vChar.y = bBlocks[i].vBlock.y+30;
+////                        charSonic.fDy = 0;
+////                        System.out.println("hit");
+////                    } 
+//                
+//                
+//            }
+//                spr[j].setX(charSonic.vChar.x+j*30);
+//                spr[j].setY(charSonic.vChar.y);
+//                if(nDir == 1 || nDir == 2 || nDir == 4) spr[j].flip(true, false);
+//                
+//                nWhatSprite = charSonic.ArrayAt(elapsedTime, nWhatSprite, arSprites.size);
+//                spr[nWhatSprite].draw(batch);
+////           
+//        }
+        Sprite spr[] = new Sprite[arSprites.size];
+        for (int i = 0; i < arSprites.size; i++) {
+            spr[i] = (arSprites.get(i));
+            spr[i].setX(40*i);
+            spr[i].setY(0);
+            spr[i].draw(batch);
+        }
+        nWhatSprite = charSonic.ArrayAt(elapsedTime, nWhatSprite, arSprites.size);
+        
+        spr[nWhatSprite] = (arSprites.get(nWhatSprite));
+        spr[nWhatSprite].setX(charSonic.vChar.x);
+        spr[nWhatSprite].setY(charSonic.vChar.y);
+        
+        for (int i = 0; i < nBlockSize; i++) {
+            charSonic = hitTest.Hit(spr[nWhatSprite], bBlocks[i].vBlock, charSonic.fDist, charSonic);
+        }
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            charSonic.dSpeed = 0;
+            charSonic.fDy = 0;
+            charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight() - spr[nWhatSprite].getHeight()/2;
+            charSonic.vChar.x = Gdx.input.getX() - spr[nWhatSprite].getWidth()/2;
+            fDist+= Gdx.input.getX();
+        }
+        spr[nWhatSprite].setX(charSonic.vChar.x);
+        spr[nWhatSprite].setY(charSonic.vChar.y);
+        if(nDir == 1 || nDir == 2 || nDir == 4) spr[nWhatSprite].flip(true, false);
+        spr[nWhatSprite].draw(batch);
+        
+        
+        
         batch.end();
     }
 

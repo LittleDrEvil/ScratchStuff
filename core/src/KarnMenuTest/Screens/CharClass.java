@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -18,7 +19,7 @@ public class CharClass extends Sprite {
     TextureAtlas[] artextureAtlas;
     Texture[] texture;
     int nDir = 0, nJum;
-    float x, y = 100, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
+    float x, y = 60, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
     double dSpeed, dGravity, dCharSpeed;
     Vector2[] avB;
     int nBlockSize = 10, nW, nH;
@@ -126,6 +127,16 @@ public class CharClass extends Sprite {
         // }
     }
 
+    
+    int ArrayAt(float elapsedTime, int prev, int nSize){
+        System.out.println(elapsedTime);
+        if(MathUtils.round(elapsedTime*10) % 2 == 0) prev +=1;
+//        System.out.println(prev);
+        if(prev>=nSize-1) prev = 0;
+//        System.out.println(prev);
+        return prev;
+    }
+    
     int Direction() {
         if (nDir == 2) {
             nDir = 1;
