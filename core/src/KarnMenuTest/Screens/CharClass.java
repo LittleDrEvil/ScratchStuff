@@ -37,13 +37,13 @@ public class CharClass extends Sprite {
         nPlayer = _nPlayer;
         vFloor.nor();
         vChar.add(x, y);
-        /* Cooperates with nDir, 
-        0 is StillRight,
-        1 is StillLeft,
-        2 is RunLeft,
-        3 is RunRight,
-        4 is JumpLeft,
-        5 is JumpRight,
+        /* Flips when directions are pressed, 
+        0 is for StillRight,
+        1 is for StillLeft,
+        2 is for RunLeft,
+        3 is for RunRight,
+        4 is for JumpLeft,
+        5 is for JumpRight,
         */
         artextureAtlas[0] = new TextureAtlas(Gdx.files.internal(sCharacter + "StillRight.pack"));
         aniChar[0] = new Animation(1 / 15f, artextureAtlas[0].getRegions());
@@ -51,8 +51,6 @@ public class CharClass extends Sprite {
         aniChar[1] = new Animation(1 / 30f, artextureAtlas[1].getRegions());
         artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
         aniChar[2] = new Animation(1 / 15f, artextureAtlas[2].getRegions());
-
-
         vBlo = new Vector2();
         avB = new Vector2[nBlockSize];
 
@@ -119,20 +117,20 @@ public class CharClass extends Sprite {
         // }
         
         //Stopping character at dead zones {
-        if (vChar.x > Gdx.graphics.getWidth() - 150) {
-            vChar.x -= fSx;
-            vChar.x = Gdx.graphics.getWidth() - 149;
-        }
+        
         vChar.add(fSx, fDy);
         // }
     }
 
     
-    int ArrayAt(float elapsedTime, int prev, int nSize){
-        System.out.println(elapsedTime);
-        if(MathUtils.round(elapsedTime*10) % 2 == 0) prev +=1;
+    int ArrayAt(int elapsedTime, int prev, int nSize){
+        if(elapsedTime % 3 == 0){
+//            System.out.println(prev + "true");
+            prev +=1;
+        }
 //        System.out.println(prev);
-        if(prev>=nSize-1) prev = 0;
+        
+        if(prev>=nSize) prev = 0;
 //        System.out.println(prev);
         return prev;
     }
@@ -223,35 +221,3 @@ public class CharClass extends Sprite {
         return false;
     }
 }
-// Unneeded hittest code, hittest put into blockclass
-//Hit Testing {
-//        if (isHit(vChar.x, vChar.y, 30, 40, 0, 0, Gdx.graphics.getWidth(), 30)) {
-//            dSpeed = 0;
-//            nJum = 0;
-//            vChar.y = fSY;
-//            dGravity = 0;
-//        } else {
-//            dGravity = -0.01;
-//        }
-//        if (isHitV(vChar, 30, 40, vFloor, Gdx.graphics.getWidth(), 30)) {
-//            dSpeed = 0;
-//            nJum = 0;
-//            vChar.y = fSY;
-//            dGravity = 0;
-//        } else {
-//            dGravity = -0.01;
-//        }
-//        if (isHitBlockT(vChar.x, vChar.y, 30, fBX-=fSx, fBY, 30)) {
-//            dSpeed = 0;
-//            nJum = 0;
-//            vChar.y = fSY;
-//           // System.out.println("top ");
-//        }
-//        if (isHitBlockLR(vChar.x, vChar.y, 30, fBX-=fSx, fBY, 30)) {
-//            dSpeed = 0;
-//            nJum = 0;
-//            vChar.x = fSX;
-//            fSx = 0;
-//            dGravity = 0;
-//            System.out.println("side");
-//        }

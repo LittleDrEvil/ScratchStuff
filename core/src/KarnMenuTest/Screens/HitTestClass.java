@@ -177,26 +177,17 @@ public class HitTestClass {
         }
         
         if (chara.getX() < 0 && fDist <= 125) {
-            charac.vChar.x += charac.fSx;
             charac.vChar.x = 1;
-        } else if (chara.getX() < 125 && fDist > 125){
-            charac.vChar.x += charac.fSx;
-            charac.vChar.x = 126;
+        } else if (chara.getX() < Gdx.graphics.getWidth()/8 && fDist > 125){
+            charac.vChar.x = Gdx.graphics.getWidth()/8+1;
         }
+        if (chara.getX() > Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/8) {
+            charac.vChar.x -= charac.fSx;
+            charac.vChar.x = Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/8 - 1;
+        }
+        
+        
         return charac;
-        //        if(isHitBlockLR(chara.vChar.x, chara.vChar.y, 30, vBlock.x - fDist, vBlock.y, 30)){
-//            chara.dSpeed = 0;
-////            chara.nJum = 0;
-////            chara.vChar.x = chara.fSX- chara.fSx;
-////            System.out.println("lr");
-//            if(chara.vChar.x <= vBlock.x - fDist){ chara.vChar.x = chara.fSX-2; System.out.println("left");}
-//            
-//            if(chara.vChar.x >= vBlock.x - fDist){ chara.vChar.x = chara.fSX+2; System.out.println("right");}
-//            
-//            chara.fSx = 0;
-//            chara.dGravity = 0;
-////            System.out.println("side");
-//        } 
     }
     boolean isHitSB(Sprite spr, BlockClass bBlock, float fDist) {
         if ((((spr.getX() <= bBlock.vBlock.x-fDist) && (spr.getX() + spr.getWidth() >= bBlock.vBlock.x-fDist))

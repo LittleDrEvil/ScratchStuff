@@ -47,11 +47,11 @@ public class ScrPlay implements Screen, InputProcessor {
     double dGravity, dSpeed;
     Vector2 vSonic;
     boolean bLeft;
-    int nBlockSize = 10;
+    int nBlockSize = 1000;
     Array<Sprite> arSprites;
     BlockClass bBlocks[];
     ArrayList<BlockClass> alBlocks;
-    int nAd = 0, nAdd = 40, nWhatSprite=0;
+    int nAd = 0, nAdd = 40, nWhatSprite=0, nTime;
 
     public ScrPlay(GdxMenu _gdxMenu) {
 //Referencing the main class.
@@ -95,13 +95,13 @@ public class ScrPlay implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        
+        nTime++;
         charSonic.x = charSonic.vChar.x;
         charSonic.y = charSonic.vChar.y;
 
         batch.begin();
 
-        elapsedTime += Gdx.graphics.getDeltaTime();
+//        elapsedTime += Gdx.graphics.getDeltaTime();
 
         if ((fBackX < -Gdx.graphics.getWidth() || fBackX > Gdx.graphics.getWidth())) {
             fBackX = 0;
@@ -127,11 +127,11 @@ public class ScrPlay implements Screen, InputProcessor {
         if (charSonic.fDist > 0) {
             fBackX -= charSonic.fSx;
         } 
-//        else if (charSonic.fDist < 0) {
-//            charSonic.fSx = 0;
-//            charSonic.fDist = 0;
-//            fBackX = 0;
-//        }
+        else if (charSonic.fDist < 0) {
+            charSonic.fSx = 0;
+            charSonic.fDist = 0;
+            fBackX = 0;
+        }
 
         for (int i = 0; i < nBlockSize; i++) {
             if (bBlocks[i].SideCheck(bBlocks[i].vBlock.x, fDist)) {
@@ -184,7 +184,8 @@ public class ScrPlay implements Screen, InputProcessor {
             spr[i].setY(0);
             spr[i].draw(batch);
         }
-        nWhatSprite = charSonic.ArrayAt(elapsedTime, nWhatSprite, arSprites.size);
+        
+        nWhatSprite = charSonic.ArrayAt(nTime, nWhatSprite, arSprites.size);
         
         spr[nWhatSprite] = (arSprites.get(nWhatSprite));
         spr[nWhatSprite].setX(charSonic.vChar.x);
@@ -204,8 +205,6 @@ public class ScrPlay implements Screen, InputProcessor {
         spr[nWhatSprite].setY(charSonic.vChar.y);
         if(nDir == 1 || nDir == 2 || nDir == 4) spr[nWhatSprite].flip(true, false);
         spr[nWhatSprite].draw(batch);
-        
-        
         
         batch.end();
     }
