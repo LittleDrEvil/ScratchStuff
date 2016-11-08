@@ -51,7 +51,9 @@ public class ScrMenu implements Screen, InputProcessor {
         stage.addActor(tbPlay);
         stage.addActor(tbGameover);
         Gdx.input.setInputProcessor(stage);
-        
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
+        }
 //        btnPlayListener();
 //        btnGameoverListener();
     }

@@ -16,8 +16,11 @@ public class BlockClass {
            vBlock = vBlock_;
            nWidth = nWidth_;
        }
+       
+       
        boolean SideCheck(float fX, float fDist){
-           if(fX < fDist || fX + 10 > fDist) return true;
+//           System.out.println(fDist);
+           if(fX + 30 >= fDist || fX + 30 <= fDist) return true;
         return false;
        }
 }

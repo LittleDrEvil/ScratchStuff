@@ -3,6 +3,7 @@ package KarnMenuTest.Screens;
 import Buttons.TbsMenu;
 import Buttons.TbMenu;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -53,6 +54,9 @@ public class ScrGameover implements Screen, InputProcessor {
         batch.end();
         stage.act();
         stage.draw();
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
+        }
     }
 
     public void btnMenuListener() {

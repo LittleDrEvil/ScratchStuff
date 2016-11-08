@@ -22,17 +22,15 @@ public class CharClass extends Sprite {
     float x, y = 60, fDy, fSY, fSX, fBX = 50, fBY = 50, fSx;
     double dSpeed, dGravity, dCharSpeed;
     Vector2[] avB;
-    int nBlockSize = 10, nW, nH;
+    int nBlockSize = 10, nW, nH, nWhatSprite = 0, nTime = 0;
     Vector2 vBlo;
     Sprite[] arSpri;
     float fDist;
+    Array<Sprite> arSprites;
+    boolean bHit;
+    HitTestClass hitTest = new HitTestClass();
     
     public void charMain(String sCharacter, int _nPlayer) {
-        arSpri = new Sprite[10];
-        for (int i = 0; i < 10; i++) {
-            arSpri[i] = new Sprite();
-        }
-        
         artextureAtlas  = new TextureAtlas[3];
         nPlayer = _nPlayer;
         vFloor.nor();
@@ -51,19 +49,23 @@ public class CharClass extends Sprite {
         aniChar[1] = new Animation(1 / 30f, artextureAtlas[1].getRegions());
         artextureAtlas[2] = new TextureAtlas(Gdx.files.internal(sCharacter + "JumpRight.pack"));
         aniChar[2] = new Animation(1 / 15f, artextureAtlas[2].getRegions());
-        vBlo = new Vector2();
-        avB = new Vector2[nBlockSize];
-
-        for (int i = 0; i < nBlockSize; i++) {
-            avB[i] = new Vector2();
-            vBlo.add(70 * i, 40 * (i + 1));
-            avB[i].add(vBlo.x, vBlo.y);
-            vBlo.add(-vBlo.x, -vBlo.y);
-        }
-        nW = 30; nH = 27;
     }
 
     public void update() {
+        nTime++;
+        
+        if(nDir == 0 || nDir == 1)
+            arSprites = artextureAtlas[0].createSprites();
+        if(nDir == 2 || nDir == 3)
+            arSprites = artextureAtlas[1].createSprites();
+        if(nDir == 4 || nDir == 5)
+            arSprites = artextureAtlas[2].createSprites();
+        
+        if(fDy != 0){
+            arSprites = artextureAtlas[2].createSprites();
+        }
+        
+        sprChar = spro(arSprites);
         //        Gravity and Movement {
         fDist+=fSx;
         dCharSpeed = 0.2;
@@ -71,28 +73,29 @@ public class CharClass extends Sprite {
         fSX = vChar.x;
         dSpeed += dGravity;
         fDy += dSpeed;
+        
         if (fSx < 0.1 && fSx > -0.1) {
             fSx = 0;
         }
 
         if (fSx >= 0) {
-            fSx -= 0.1;
+            fSx -= dCharSpeed/2;
         }
         if (fSx <= 0) {
-            fSx += 0.1;
+            fSx += dCharSpeed/2;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 dGravity = -0.01;
             }
         if (nPlayer == 1) {
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                fSx += 0.2;
+                fSx += dCharSpeed;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                fSx -= 0.2;
+                fSx -= dCharSpeed;
             }
             if (nJum == 0) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                     fDy = 4;
                     nJum = 1;
                     dGravity = -0.01;
@@ -108,7 +111,7 @@ public class CharClass extends Sprite {
                 fSx -= dCharSpeed;
             }
             if (nJum == 0) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                     fDy = 4;
                     nJum = 1;
                 }
@@ -116,12 +119,41 @@ public class CharClass extends Sprite {
         }
         // }
         
-        //Stopping character at dead zones {
         
+
+//        System.out.println(fDy);
         vChar.add(fSx, fDy);
-        // }
+        sprChar.setX(vChar.x);
+        sprChar.setY(vChar.y);
     }
 
+    Sprite spro(Array<Sprite> arSprites){
+        Sprite spro = new Sprite();
+        spro.setX(vChar.x);
+        spro.setY(vChar.y);
+        
+        nWhatSprite = ArrayAt(nTime, nWhatSprite, arSprites.size);
+        
+        spro = (arSprites.get(nWhatSprite));
+        
+        
+        if (touchDown()) {
+            dSpeed = 0;
+            fDy = 0;
+            vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight() - spro.getHeight()/2;
+            vChar.x = Gdx.input.getX() - spro.getWidth()/2;
+            fDist = Gdx.input.getX();
+        }   
+        
+        return spro;
+    }
+    
+    public boolean touchDown () {
+      if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+          return true;     
+      }
+      return false;
+   }
     
     int ArrayAt(int elapsedTime, int prev, int nSize){
         if(elapsedTime % 3 == 0){
@@ -173,51 +205,5 @@ public class CharClass extends Sprite {
         return nDir;
     }
 
-    boolean isHit(float nX1, float nY1, float nW1, float nH1, float nX2, float nY2, float nW2, float nH2) {
-
-        if ((((nX1 <= nX2 + 5) && (nX1 + nW1 + 5 >= nX2))
-                || ((nX1 >= nX2) && (nX1 <= nX2 + nW2)))
-                && (((nY1 <= nY2) && (nY1 + nH1 >= nY2))
-                || ((nY1 >= nY2) && (nY1 <= nY2 + nH2)))) {
-            return true;
-        } else {
-            return (false);
-        }
-    }
-
-    boolean isHitV(Vector2 v1, float nW1, float nH1, Vector2 v2, float nW2, float nH2) {
-
-        if ((((v1.x <= v2.x) && (v1.x + nW1 >= v2.x))
-                || ((v1.x >= v2.x) && (v1.x <= v2.x + nW2)))
-                && (((v1.y <= v2.y) && (v1.y + nH1 >= v2.y))
-                || ((v1.y >= v2.y) && (v1.y <= v2.y + nH2)))) {
-            return true;
-        } else {
-            return (false);
-        }
-    }
-
-    boolean isHitBlockLR(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
-
-        if ((((nX1 <= nX2) && (nX1 + nS1 >= nX2))
-                || ((nX1 >= nX2) && (nX1 <= nX2 + nS2)))
-                && (((nY1 <= nY2 - 3) && (nY1 + nS1 >= nY2 - 3))
-                || ((nY1 >= nY2 - 3) && (nY1 <= nY2 + nS2 - 3)))) {
-            return true;
-        }
-        return false;
-
-
-
-    }
-
-    boolean isHitBlockT(float nX1, float nY1, float nS1, float nX2, float nY2, float nS2) {
-
-        if ((((nX1 <= nX2 + 1) && (nX1 + nS1 >= nX2 - 1))
-                || ((nX1 >= nX2 - 1) && (nX1 <= nX2 + nS2 + 1)))
-                && ((nY1 >= nY2 + 5) && (nY1 <= nY2 + 5 + nS2))) {
-            return true;
-        }
-        return false;
-    }
+   
 }
