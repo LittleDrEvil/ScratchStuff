@@ -42,7 +42,6 @@ public class ScrPlay implements Screen, InputProcessor {
     CharClass charSonic = new CharClass();
     CharClass charSon = new CharClass();
     Animation[] aniChar;
-    private float elapsedTime = 0;
     Texture imgFloor, imgBack, imgBlock;
     int nJum, nDir = 0, nAniCurr;
     float fSY, fSX, fBX = 50, fBY = 50, fX, fY, fBackX, fDist;
@@ -153,7 +152,14 @@ public class ScrPlay implements Screen, InputProcessor {
         
         System.out.println(charSonic.fDy);
         batch.end();
-        
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            dSpeed = 0;
+            charSonic.fDy = 0;
+            charSonic.vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight() - charSonic.sprChar.getHeight()/2;
+            charSonic.vChar.x = Gdx.input.getX() - charSonic.sprChar.getWidth()/2;
+            fDist = Gdx.input.getX();
+            fBackX += Gdx.input.getX();
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             Gdx.app.exit();
         }

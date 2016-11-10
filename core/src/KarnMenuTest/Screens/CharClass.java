@@ -133,18 +133,7 @@ public class CharClass extends Sprite {
         spro.setY(vChar.y);
         
         nWhatSprite = ArrayAt(nTime, nWhatSprite, arSprites.size);
-        
-        spro = (arSprites.get(nWhatSprite));
-        
-        
-        if (touchDown()) {
-            dSpeed = 0;
-            fDy = 0;
-            vChar.y = -Gdx.input.getY() + Gdx.graphics.getHeight() - spro.getHeight()/2;
-            vChar.x = Gdx.input.getX() - spro.getWidth()/2;
-            fDist = Gdx.input.getX();
-        }   
-        
+        spro = (arSprites.get(nWhatSprite));        
         return spro;
     }
     
